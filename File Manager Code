@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main()
+{
+    char filename[100], choice;
+    FILE *file_ptr;
+
+    while(1) {
+        printf("\n\n");
+        printf("MENU:\n");
+        printf("1. Create a new file\n");
+        printf("2. Read a file\n");
+        printf("3. Modify a file\n");
+        printf("4. Delete a file\n");
+        printf("5. Exit\n");
+        printf("Enter your choice (1-5): ");
+        scanf(" %c", &choice);
+
+        switch(choice) {
+            case '1':
+                printf("Enter filename: ");
+                scanf("%s", filename);
+                file_ptr = fopen(filename, "w");
+                if(file_ptr == NULL) {
+                    printf("Error creating file.\n");
+                }
+                else {
+                    printf("File created successfully.\n");
+                    fclose(file_ptr);
+                }
+                break;
+            case '2':
+                printf("Enter filename: ");
+                scanf("%s", filename);
+                file_ptr = fopen(filename, "r");
+                if(file_ptr == NULL) {
+                    printf("Error reading file.\n");
+                }
+                else {
+                    char c;
+                    printf("Contents of file %s:\n", filename);
+                    while((c = fgetc(file_ptr)) != EOF) {
+                        printf("%c", c);
+                    }
+                    fclose(file_ptr);
+                }
+                break;
+            case '3':
+                printf("Enter filename: ");
+                scanf("%s", filename);
+                file_ptr = fopen(filename, "a+");
+                if(file_ptr == NULL) {
+                    printf("Error modifying file.\n");
+                }
+                else {
+                    char buffer[1000];
+                    printf("Enter text to append to %s: ", filename);
+                    scanf(" %[^\n]", buffer);
+                    fprintf(file_ptr, "%s\n", buffer);
+                    printf("File modified successfully.\n");
+                    fclose(file_ptr);
+                }
+                break;
+            case '4':
+                printf("Enter filename: ");
+                scanf("%s", filename);
+                if(remove(filename) != 0) {
+                    printf("Error deleting file.\n");
+                }
+                else {
+                    printf("File deleted successfully.\n");
+                }
+                break;
+            case '5':
+                printf("Exiting program.\n");
+                exit(0);
+            default:
+                printf("Invalid choice. Please enter a number between 1 and 5.\n");
+                break;
+        }
+    }
+
+    return 0;
+}
